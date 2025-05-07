@@ -68,7 +68,7 @@ def apply_sextractor(img_fits_name, stt_data_dir, lis_type="rpi"):
     else:
         raise NameError("ERROR: See function apply_sextractor")
     os.chdir(stt_data_dir)
-    sext_task = "{} {}".format(SEXTRACTOR_STR, img_fits_name)
+    sext_task = "{} {}".format(SEXTRACTOR_STR, os.path.abspath(img_fits_name))
     sp.check_output(sext_task, shell=True)
     sext1 = ascii.read('./test.cat', format='sextractor')
     sext1.sort(['MAG_ISO'])
@@ -358,7 +358,7 @@ def solve_lis(img_full_dir, catalog_division, stt_data_dir, lis_type="rpi"):
         img_fits_name = "{}/{}".format(stt_data_dir, str_fits)
         jpg2fits(img_full_dir, img_fits_name)
     elif lis_type == "stereo":
-        str_fits = img_full_dir
+        str_fits = os.path.abspath(img_full_dir)
     else:
         raise NameError("ERROR: Please introduce a valid lis_type parameter <rpi> or <stereo>")
     apply_sextractor(str_fits, stt_data_dir, lis_type)
@@ -402,3 +402,4 @@ def solve_lis(img_full_dir, catalog_division, stt_data_dir, lis_type="rpi"):
     print("\n---> ATTITUDE SOLUTION:\n RA   = {:.4f}°\n DEC  = {:.4f}°\n Roll = {:.4f}°\n Exec time = {:.4f} s".format(
         third_alpha, third_delta, third_roll_deg, exec_time))
     return third_alpha, third_delta, third_roll_deg, third_match_std[0], third_match_std[1]
+
